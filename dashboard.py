@@ -51,17 +51,24 @@ def derive_topic(title):
     return 'M&A'
 
 # --- ENGINE ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 analyzer = SentimentIntensityAnalyzer()
 @st.cache_resource
 def load_assets():
     try:
+        models_dir = os.path.join(BASE_DIR, 'models')
         return (
-            joblib.load('models/series_model.joblib'), joblib.load('models/le_series.joblib'),
-            joblib.load('models/stage_model.joblib'), joblib.load('models/le_stage.joblib'),
-            joblib.load('models/tfidf_vect.joblib'), joblib.load('models/feature_cols.joblib'),
-            joblib.load('models/model_metrics.joblib'), pd.read_excel('startup_news_updated.xlsx')
+            joblib.load(os.path.join(models_dir, 'series_model.joblib')),
+            joblib.load(os.path.join(models_dir, 'le_series.joblib')),
+            joblib.load(os.path.join(models_dir, 'stage_model.joblib')),
+            joblib.load(os.path.join(models_dir, 'le_stage.joblib')),
+            joblib.load(os.path.join(models_dir, 'tfidf_vect.joblib')),
+            joblib.load(os.path.join(models_dir, 'feature_cols.joblib')),
+            joblib.load(os.path.join(models_dir, 'model_metrics.joblib')),
+            pd.read_excel(os.path.join(BASE_DIR, 'startup_news_updated.xlsx'))
         )
     except Exception as e:
+        st.error(f"Failed to load assets: {e}")
         return None, None, None, None, None, None, None, None
 
 m_raw, le_raw, m_stg, le_stg, tfidf, f_cols, metrics, df_hist = load_assets()
