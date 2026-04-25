@@ -1,9 +1,0 @@
-streamlit
-pandas
-numpy
-joblib
-plotly
-scikit-learn
-vaderSentiment
-feedparser
-openpyxl
